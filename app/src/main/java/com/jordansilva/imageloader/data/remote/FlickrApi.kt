@@ -1,8 +1,8 @@
 package com.jordansilva.imageloader.data.remote
 
 import android.util.Log
-import com.jordansilva.imageloader.util.HttpClient
-import com.jordansilva.imageloader.util.HttpRequest
+import com.jordansilva.imageloader.util.http.HttpClient
+import com.jordansilva.imageloader.util.http.HttpRequest
 
 class FlickrApi {
 
@@ -30,7 +30,7 @@ class FlickrApi {
                 .setPage(page)
                 .pageLimit(PAGE_LIMIT)
 
-            val response = HttpClient.execute(request)
+            val response = HttpClient().execute(request)
             val jsonObject = response.sourceAsJson().getJSONObject("photos")
 
             //FIXME: Extract to Mapper

@@ -1,42 +1,13 @@
-package com.jordansilva.imageloader.util
+package com.jordansilva.imageloader.util.http
 
+import android.util.Log
 import androidx.annotation.WorkerThread
-import org.json.JSONObject
-import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.TimeUnit
 
-//FIXME: Extract this class to a different package and need to be refactored
-data class HttpRequest(var url: String) {
-    var requestMethod = "GET"
-    var useCaches = true
-    var connectionTimeout = TimeUnit.SECONDS.toMillis(10).toInt()
-    var readTimeout = TimeUnit.SECONDS.toMillis(10).toInt()
-    var allowUserInteraction = false
-}
-
-class HttpResponse(val code: Int, val message: String, val source: InputStream? = null) {
-
-    fun sourceAsString(): String? = source?.use {
-        return@use BufferedReader(InputStreamReader(it)).readText()
-    }
-
-    fun sourceAsJson(): JSONObject = source?.use {
-        val response = BufferedReader(InputStreamReader(it)).readText()
-        return@use JSONObject(response)
-    } ?: JSONObject()
-}
-
-object HttpClient {
-
-    init {
-        HttpURLConnection.setFollowRedirects(true)
-    }
+class HttpClient {
 
     @WorkerThread
     private fun openConnection(request: HttpRequest, maxRedirect: Int = 3): HttpURLConnection {
@@ -81,7 +52,11 @@ object HttpClient {
             urlConnection.inputStream.copyTo(byteOutputStream)
             val inputStream = ByteArrayInputStream(byteOutputStream.toByteArray())
 
-            return HttpResponse(urlConnection.responseCode, urlConnection.responseMessage, inputStream)
+            return HttpResponse(
+                urlConnection.responseCode,
+                urlConnection.responseMessage,
+                inputStream
+            )
         } catch (ex: Exception) {
             throw ex
         } finally {

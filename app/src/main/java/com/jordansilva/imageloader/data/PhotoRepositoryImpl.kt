@@ -14,7 +14,7 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi) : PhotoRepository {
                 Photo(
                     id = it.id,
                     title = it.title,
-                    url = "http://farm${it.farm}.static.flickr.com/${it.server}/${it.id}_${it.secret}.jpg"
+                    url = "https://farm${it.farm}.static.flickr.com/${it.server}/${it.id}_${it.secret}.jpg"
                 )
             }
     }
