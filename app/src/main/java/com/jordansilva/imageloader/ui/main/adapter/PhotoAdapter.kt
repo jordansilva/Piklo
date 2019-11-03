@@ -4,46 +4,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jordansilva.imageloader.R
 import com.jordansilva.imageloader.ui.model.PhotoViewData
 import com.jordansilva.imageloader.util.extension.load
 
-class PhotoAdapter(items: List<PhotoViewData>) : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
+class PhotoAdapter : ListAdapter<PhotoViewData, PhotoAdapter.PhotoViewHolder>(photoViewDataDiff) {
 
-    private var data: MutableList<PhotoViewData> = mutableListOf()
+    private companion object {
+        val photoViewDataDiff = object : DiffUtil.ItemCallback<PhotoViewData>() {
+            override fun areItemsTheSame(oldItem: PhotoViewData, newItem: PhotoViewData): Boolean {
+                return oldItem == newItem
+            }
 
-    init {
-        addItems(items)
+            override fun areContentsTheSame(oldItem: PhotoViewData, newItem: PhotoViewData): Boolean {
+                return oldItem.url == newItem.url
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.simple_row_image, parent, false)
-        return ViewHolder(view)
+        return PhotoViewHolder(view)
     }
 
-    fun addItems(items: List<PhotoViewData>?) = items?.let {
-        data.addAll(items)
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
+    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+        val item = getItem(position)
         holder.bindView(item)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view.rootView) {
-
+    class PhotoViewHolder(view: View) : RecyclerView.ViewHolder(view.rootView) {
         private var imageView: ImageView = view.findViewById(R.id.imageItem)
 
         fun bindView(item: PhotoViewData) {
             imageView.load(item.url)
         }
     }
-
 }

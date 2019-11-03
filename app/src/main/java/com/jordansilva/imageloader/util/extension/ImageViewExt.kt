@@ -2,7 +2,6 @@ package com.jordansilva.imageloader.util.extension
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.util.Log
 import android.util.LruCache
 import android.widget.ImageView

@@ -1,4 +1,4 @@
-package com.jordansilva.imageloader.domain.model
+package com.jordansilva.imageloader.domain
 
 import com.jordansilva.imageloader.domain.BaseDomain
 
