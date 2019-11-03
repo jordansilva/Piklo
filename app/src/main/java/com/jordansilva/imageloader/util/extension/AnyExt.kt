@@ -29,4 +29,3 @@ fun Bitmap.resizeTo(size: Int): Bitmap {
     recycle()
     return newBitmap
 }
-

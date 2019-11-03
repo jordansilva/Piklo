@@ -2,9 +2,9 @@ package com.jordansilva.imageloader.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.jordansilva.imageloader.data.PhotoRepository
-import com.jordansilva.imageloader.data.PhotoRepositoryImpl
-import com.jordansilva.imageloader.data.remote.FlickrApi
+import com.jordansilva.imageloader.repository.PhotoRepository
+import com.jordansilva.imageloader.repository.PhotoRepositoryImpl
+import com.jordansilva.imageloader.repository.remote.FlickrApi
 import com.jordansilva.imageloader.ui.main.MainViewModel
 
 class ViewModelFactoryProducer : ViewModelProvider.NewInstanceFactory() {

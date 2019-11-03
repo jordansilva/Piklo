@@ -1,6 +1,5 @@
-package com.jordansilva.imageloader.data.remote
+package com.jordansilva.imageloader.repository.remote
 
-import android.util.Log
 import com.jordansilva.imageloader.util.http.HttpClient
 import com.jordansilva.imageloader.util.http.HttpRequest
 
@@ -23,7 +22,6 @@ class FlickrApi {
      */
     fun searchPhotos(text: String, page: Int = 1): FlickrPhotosSearchResult {
         try {
-            Log.d("FlickrAPI", "Search Photos: $text - Page: $page")
             val request = buildRequest(ACTION.PHOTOS_SEARCH)
                 .addQuery("text", text)
                 .safeSearch()

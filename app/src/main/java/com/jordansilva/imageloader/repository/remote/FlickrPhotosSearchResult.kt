@@ -1,4 +1,4 @@
-package com.jordansilva.imageloader.data.remote
+package com.jordansilva.imageloader.repository.remote
 
 data class FlickrPhotosSearchResult(
         val page: Int,

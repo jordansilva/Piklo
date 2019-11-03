@@ -2,8 +2,6 @@ package com.jordansilva.imageloader.util.imageloader
 
 import android.graphics.Bitmap
 import android.util.LruCache
-import com.jordansilva.imageloader.util.extension.px
-import com.jordansilva.imageloader.util.extension.resizeTo
 
 class ImageCache {
 

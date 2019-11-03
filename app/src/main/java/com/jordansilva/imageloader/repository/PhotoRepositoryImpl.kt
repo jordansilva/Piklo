@@ -1,13 +1,11 @@
-package com.jordansilva.imageloader.data
+package com.jordansilva.imageloader.repository
 
-import android.util.Log
-import com.jordansilva.imageloader.data.remote.FlickrApi
-import com.jordansilva.imageloader.domain.Photo
+import com.jordansilva.imageloader.repository.model.Photo
+import com.jordansilva.imageloader.repository.remote.FlickrApi
 
 class PhotoRepositoryImpl(private val flickrApi: FlickrApi) : PhotoRepository {
 
     override fun listPhotos(query: String, page: Int): List<Photo> {
-        Log.d("PhotoRepository", "query: $query - page: $page")
         return flickrApi.searchPhotos(query, page)
             .photos
             .map {

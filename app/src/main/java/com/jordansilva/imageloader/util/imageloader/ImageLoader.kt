@@ -9,18 +9,19 @@ import com.jordansilva.imageloader.util.extension.px
 import com.jordansilva.imageloader.util.extension.resizeTo
 import com.jordansilva.imageloader.util.http.HttpClient
 import com.jordansilva.imageloader.util.http.HttpRequest
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object ImageLoader {
 
     private var imageCache: ImageCache = ImageCache()
 
-    fun load(view: ImageView, url: String) {
+    fun load(view: ImageView, url: String, cache: Boolean = true) {
         val job = MainScope().launch {
-            val bitmap = imageCache.load(url) ?: run {
-                view.setImageDrawable(null)
-                loadFromNetwork(url)
-            }
+            view.setImageDrawable(null)
+            val bitmap = loadFromCache(url) ?: loadFromNetwork(url)
             view.setImageBitmap(bitmap)
         }
 
@@ -34,9 +35,10 @@ object ImageLoader {
 
             }
         })
+    }
 
-
-
+    private fun loadFromCache(url: String): Bitmap? {
+        return imageCache.load(url)
     }
 
     private suspend fun loadFromNetwork(url: String): Bitmap? {
@@ -55,9 +57,3 @@ object ImageLoader {
         }
     }
 }
-
-fun ImageView.load(url: String) {
-    ImageLoader.load(this, url)
-}
-
-

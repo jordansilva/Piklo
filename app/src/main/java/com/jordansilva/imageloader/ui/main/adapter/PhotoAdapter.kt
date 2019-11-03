@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jordansilva.imageloader.R
 import com.jordansilva.imageloader.ui.model.PhotoViewData
-import com.jordansilva.imageloader.util.imageloader.load
+import com.jordansilva.imageloader.util.extension.load
 
 class PhotoAdapter : ListAdapter<PhotoViewData, PhotoAdapter.PhotoViewHolder>(photoViewDataDiff) {
 
