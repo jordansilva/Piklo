@@ -1,6 +1,6 @@
 package com.jordansilva.imageloader.repository.remote
 
-data class FlickrPhotosSearchResult(
+data class FlickrPhotosSearch(
         val page: Int,
         val pages: Int,
         val perPage: Int,

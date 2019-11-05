@@ -16,6 +16,7 @@ fun EditText.clearButtonWithAction(block: () -> Unit) {
             val clearIcon = if (editable?.isNotEmpty() == true) ContextCompat.getDrawable(context, R.drawable.ic_baseline_clear_24) else null
             setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], compoundDrawables[1], clearIcon, compoundDrawables[3])
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
     })
@@ -26,18 +27,18 @@ fun EditText.clearButtonWithAction(block: () -> Unit) {
                 setText("")
                 block()
                 requestFocus()
-                true
+                return@setOnTouchListener true
             }
         }
-        false
+        return@setOnTouchListener false
     }
 }
 
 fun EditText.onEditorAction(action: Int, block: () -> Unit) {
     setOnEditorActionListener { _, actionId, keyEvent ->
-        dismissKeyboard()
-        if (actionId == action || keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (actionId == action || (actionId == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
             block()
+            dismissKeyboard()
             clearFocus()
             true
         } else {

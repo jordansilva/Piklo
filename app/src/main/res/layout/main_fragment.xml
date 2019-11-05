@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ui.main.MainFragment">
+
+    <EditText
+        android:id="@+id/editQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_white"
+        android:drawableStart="@drawable/ic_baseline_search_24"
+        android:drawablePadding="6dp"
+        android:hint="@string/search_photos"
+        android:imeOptions="actionDone"
+        android:inputType="textAutoCorrect"
+        android:maxLines="1"
+        android:padding="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/editQuery"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:itemCount="50"
         tools:listitem="@layout/simple_row_image"
         tools:spanCount="3" />
 
-    <EditText
-        android:id="@+id/editQuery"
-        android:layout_width="0dp"
+    <include
+        android:id="@+id/emptyView"
+        layout="@layout/empty_view"
+        android:layout_below="@+id/editQuery"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/search_photos"
-        android:background="@drawable/rounded_white"
-        android:drawableStart="@drawable/ic_baseline_search_24"
-        android:drawablePadding="6dp"
-        android:inputType="textAutoCorrect"
-        android:imeOptions="actionDone"
-        android:maxLines="1"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="visible"
+        android:layout_centerInParent="true" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
+
+
+</RelativeLayout>

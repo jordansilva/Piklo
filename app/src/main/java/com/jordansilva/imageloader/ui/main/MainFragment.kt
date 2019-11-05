@@ -16,8 +16,7 @@ import com.jordansilva.imageloader.ui.model.PhotoViewData
 import com.jordansilva.imageloader.util.InfiniteScrollListener
 import com.jordansilva.imageloader.util.extension.clearButtonWithAction
 import com.jordansilva.imageloader.util.extension.onEditorAction
-import kotlinx.android.synthetic.main.main_fragment.editQuery
-import kotlinx.android.synthetic.main.main_fragment.recyclerView
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private val viewModel by viewModels<MainViewModel>(factoryProducer = { ViewModelFactoryProducer() })
+    private val viewModel by viewModels<MainViewModel>(factoryProducer = { ViewModelFactoryProducer(requireContext()) })
     private val photoAdapter = PhotoAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,6 +40,14 @@ class MainFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.listOfPhotos.observe(viewLifecycleOwner, Observer { updateAdapter(it) })
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { processState(it) })
+    }
+
+    private fun processState(viewState: FlickrListViewState) {
+        when (viewState) {
+            is FlickrListViewState.Loading -> progressBar.show()
+            is FlickrListViewState.Completed -> progressBar.hide()
+        }
     }
 
     private fun initUi() {
@@ -49,7 +56,7 @@ class MainFragment : Fragment() {
 
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         recyclerView.adapter = photoAdapter
-        recyclerView.addOnScrollListener(InfiniteScrollListener(threshold = 50) { nextPage() })
+        recyclerView.addOnScrollListener(InfiniteScrollListener(threshold = 10) { nextPage() })
     }
 
     private fun search(text: String) {
@@ -63,6 +70,7 @@ class MainFragment : Fragment() {
     private fun updateAdapter(data: List<PhotoViewData>?) {
         data?.let {
             photoAdapter.submitList(data)
-        }
+            emptyView.visibility = if (data.isNullOrEmpty()) View.VISIBLE else View.GONE
+        } ?: photoAdapter.submitList(emptyList())
     }
 }

@@ -1,9 +1,12 @@
 package com.jordansilva.imageloader.util
 
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class InfiniteScrollListener(private val threshold: Int = THRESHOLD, val block: () -> Unit) : RecyclerView.OnScrollListener() {
+class InfiniteScrollListener(
+        private val threshold: Int = THRESHOLD,
+        val block: () -> Unit
+) : RecyclerView.OnScrollListener() {
 
     private companion object {
         const val THRESHOLD = 10
@@ -16,7 +19,7 @@ class InfiniteScrollListener(private val threshold: Int = THRESHOLD, val block: 
         super.onScrolled(recyclerView, dx, dy)
 
         val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
-        val lastItemPosition = (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+        val lastItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
         //This condition happens when the RecyclerView is cleaned.
         if (previousTotalCount > totalItemCount || (loading && totalItemCount > previousTotalCount)) {
@@ -25,7 +28,7 @@ class InfiniteScrollListener(private val threshold: Int = THRESHOLD, val block: 
         }
 
         //Close to the
-        if (!loading && lastItemPosition + threshold >= totalItemCount) {
+        if (!loading && totalItemCount > 0 && lastItemPosition + threshold >= totalItemCount) {
             loading = true
             block()
         }

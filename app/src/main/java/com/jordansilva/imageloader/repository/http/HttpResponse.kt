@@ -1,11 +1,15 @@
-package com.jordansilva.imageloader.util.http
+package com.jordansilva.imageloader.repository.http
 
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class HttpResponse(val code: Int, val message: String, val source: InputStream? = null) {
+data class HttpResponse(val code: Int, val message: String, val source: InputStream? = null) {
+
+    fun isSuccess(): Boolean {
+        return code in 200..299
+    }
 
     fun sourceAsString(): String? = source?.use {
         return@use BufferedReader(InputStreamReader(it)).readText()

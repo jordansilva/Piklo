@@ -1,9 +1,17 @@
 package com.jordansilva.imageloader.repository.remote
 
-import com.jordansilva.imageloader.util.http.HttpClient
-import com.jordansilva.imageloader.util.http.HttpRequest
+import com.jordansilva.imageloader.repository.http.HttpClient
+import com.jordansilva.imageloader.repository.http.HttpRequest
+import com.jordansilva.imageloader.repository.mapper.FlickrPhotoSearchMapper
+import com.jordansilva.imageloader.repository.mapper.Mapper
+import org.json.JSONObject
 
-class FlickrApi {
+interface FlickrApi {
+    fun searchPhotos(text: String, page: Int = 1): FlickrPhotosSearch
+}
+
+class FlickrApiClient(private val client: HttpClient,
+                      private val mapper: Mapper<JSONObject, FlickrPhotosSearch> = FlickrPhotoSearchMapper) : FlickrApi {
 
     private companion object {
         const val API_ADDRESS = "https://api.flickr.com/services/rest/?format=json"
@@ -20,51 +28,25 @@ class FlickrApi {
     /**
      * API ACTION: flickr.photos.search
      */
-    fun searchPhotos(text: String, page: Int = 1): FlickrPhotosSearchResult {
+    override fun searchPhotos(text: String, page: Int): FlickrPhotosSearch {
         try {
+            if (text.isBlank())
+                error("Invalid query for search photos! Please provide a valid text!")
+
             val request = buildRequest(ACTION.PHOTOS_SEARCH)
                 .addQuery("text", text)
                 .safeSearch()
                 .setPage(page)
                 .pageLimit(PAGE_LIMIT)
 
-            val response = HttpClient().execute(request)
-            val jsonObject = response.sourceAsJson().getJSONObject("photos")
-
-            //FIXME: Extract to Mapper
-            val jsonArray = jsonObject.getJSONArray("photo")
-            val photos = mutableListOf<FlickrPhoto>()
-            repeat(jsonArray.length()) {
-                with(jsonArray.getJSONObject(it)) {
-                    FlickrPhoto(
-                        id = getString("id"),
-                        owner = getString("owner"),
-                        secret = getString("secret"),
-                        server = getString("server"),
-                        farm = getInt("farm"),
-                        title = getString("title"),
-                        isPublic = getString("ispublic"),
-                        isFriend = getString("isfriend"),
-                        isFamily = getString("isfamily")
-                    ).also { photo -> photos.add(photo) }
-                }
-            }
-
-            return with(jsonObject) {
-                FlickrPhotosSearchResult(
-                    page = getInt("page"),
-                    pages = getInt("pages"),
-                    perPage = getInt("perpage"),
-                    total = getInt("total"),
-                    photos = photos
-                )
-            }
+            val response = client.execute(request)
+            return mapper.mapToDomain(response.sourceAsJson())
         } catch (ex: Exception) {
             throw ex
         }
     }
 
-    private fun buildRequest(action: String): HttpRequest =
+    private fun buildRequest(action: String) =
         HttpRequest(API_ADDRESS)
             .action(action)
             .noJsonCallback()
