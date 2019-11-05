@@ -8,11 +8,6 @@ This app allows the user to search Flickr photos entering a query (e.g., kittens
 The project was developed using Kotlin, Android Jetpack Components (LiveData, ViewModel) and Kotlin Coroutines (to deal with asynchronous calls & multithreading).
 In this project, I tried to apply concepts from clean architecture to build an easy and testable project.
 
-# TODO:
-- Implement Tests
-- Improve layout
-    - Implement Network Status verification
-
 
 Usage
 --------
@@ -56,6 +51,7 @@ Improvements & next steps
 - Allow custom view as targets
 - Allow load local images, not only from the network (i.e, This could be an external extension library)
 - Implement Dependency Injection to facilitate the test implementation by injecting test class dependencies.
+- Implement better network verification (i.e., online, offline, slow connection, etc)
 
 Project structure
 --------
@@ -105,5 +101,5 @@ Compatibility
 - Creating Piklo: ~4 hours.
 - Creating Project architecture: 1 hour.
 - Creating and testing HTTP & Flickr API requests: ~1-2 hours.
-- Refactoring & Implementing tests: ~5 hours.
+- Refactoring & Implementing tests: ~6 hours.
 - Writing README: 30min
